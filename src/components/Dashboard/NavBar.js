@@ -1,33 +1,24 @@
 import React from "react";
 import { compose } from "redux";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { signOut } from "../../store/actions/authActions";
 import "./navbar.css";
 import { firestoreConnect } from "react-redux-firebase";
-
-// material ui import
 import {
   makeStyles,
-  Badge,
   Typography,
   Toolbar,
   CssBaseline,
   AppBar,
-  Drawer,
-  Card,
+  SwipeableDrawer,
 } from "@material-ui/core";
-
-// import icons
-import GroupOutlinedIcon from "@material-ui/icons/GroupOutlined";
-import PhotoLibraryOutlinedIcon from "@material-ui/icons/PhotoLibraryOutlined";
-import GroupAddOutlinedIcon from "@material-ui/icons/GroupAddOutlined";
-import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
-import AccessTimeOutlinedIcon from "@material-ui/icons/AccessTimeOutlined";
-import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
-import AddAPhotoOutlinedIcon from "@material-ui/icons/AddAPhotoOutlined";
+import clsx from "clsx";
+import { useTheme } from "@material-ui/core/styles";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import { deepOrange } from "@material-ui/core/colors";
+import NavBarDrawer from "./NavBar/NavBarDrawer";
+import CloseNavBar from "./NavBar/CloseNavBar";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -35,169 +26,156 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   appBar: {
+    backgroundColor: "#0097a7",
     zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
   },
+  appBarShift: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  menuButton: {
+    marginRight: 36,
+  },
+  hide: {},
   drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
+    [theme.breakpoints.up("sm")]: {
+      width: drawerWidth,
+      flexShrink: 0,
+      whiteSpace: "nowrap",
+      height: "100%",
+    },
   },
-  drawerPaper: {
+  drawerOpen: {
     width: drawerWidth,
-  },
 
-  content: {},
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  drawerClose: {
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: "hidden",
+    width: theme.spacing(0) + 1,
+    [theme.breakpoints.up("sm")]: {
+      width: theme.spacing(9) + 1,
+    },
+  },
+  toolbar: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    backgroundColor: "#0097a7",
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+  },
+  usertoolbar: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    padding: theme.spacing(0, 2),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
+  large: {
+    width: theme.spacing(7),
+    height: theme.spacing(7),
+  },
+  smaller: {
+    width: theme.spacing(4),
+    height: theme.spacing(4),
+  },
+  orange: {
+    color: theme.palette.getContrastText(deepOrange[500]),
+    backgroundColor: deepOrange[500],
+  },
+  companyname: {
+    color: "white",
+    [theme.breakpoints.up("sm")]: { visibility: "hidden" },
+  },
 }));
 
 const NavBar = (props) => {
   const classes = useStyles();
-  const { profile, auth } = props;
-  let addImage;
-  let AddEvent;
-  let addContac;
-  if (profile.accountType === "admin") {
-    addImage = (
-      <Link to="/addphoto" style={{ textDecoration: "none" }}>
-        <div className="navbar-icon-subcontent">
-          <div className="navbar-icon">
-            <AddAPhotoOutlinedIcon />
-          </div>
-          <span className="navbar-sublist">AddImage</span>
-        </div>
-      </Link>
-    );
-    addContac = (
-      <Link to="/signup" style={{ textDecoration: "none" }}>
-        <div className="navbar-icon-subcontent">
-          <div className="navbar-icon">
-            <GroupAddOutlinedIcon />
-          </div>
-          <span className="navbar-sublist">Add Contacts</span>
-        </div>
-      </Link>
-    );
-    AddEvent = (
-      <Link to="/event" style={{ textDecoration: "none" }}>
-        <div className="navbar-icon-subcontent">
-          <div className="navbar-icon">
-            <AccessTimeOutlinedIcon />
-          </div>
-          <span className="navbar-sublist">Events</span>
-        </div>
-      </Link>
-    );
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(true);
+  let nav;
+  const handleDrawerOpen = () => {
+    if (open === true) {
+      setOpen(false);
+    } else {
+      setOpen(true);
+    }
+  };
+  if (open === true) {
+    nav = <NavBarDrawer />;
   } else {
-    addImage = null;
-    AddEvent = null;
-    addContac = null;
+    nav = <CloseNavBar />;
   }
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar className={classes.appBar}>
-        <Toolbar className="tool_bar">
-          <Typography variant="h6" noWrap edge="end">
+      <AppBar
+        elevation="0"
+        position="fixed"
+        className={clsx(classes.appBar, {
+          [classes.appBarShift]: open,
+        })}
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            className={clsx(classes.menuButton, {
+              [classes.hide]: open,
+            })}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap className="classes.companyname">
             Seva Development
           </Typography>
         </Toolbar>
       </AppBar>
-      <Drawer
-        className={classes.drawer}
+      <SwipeableDrawer
+        anchor={theme.direction === "rtl" ? "right" : "left"}
+        ModalProps={{
+          keepMounted: true, // Better open performance on mobile.
+        }}
         variant="permanent"
+        className={clsx(classes.drawer, {
+          [classes.drawerOpen]: open,
+          [classes.drawerClose]: !open,
+        })}
         classes={{
-          paper: classes.drawerPaper,
+          paper: clsx({
+            [classes.drawerOpen]: open,
+            [classes.drawerClose]: !open,
+          }),
         }}
       >
-        <Toolbar />
-        <div className="drawerContainer">
-          <Card elevation={100} className="nav-bar">
-            <div className="navbar-img-div">
-              <img className="navbar-img" src={profile.photoURL} alt=""></img>
-            </div>
-            <div className="navbar-name">
-              <span>{profile.fullName}</span>
-            </div>
-            <div className="navbar-content">
-              <span className="navbar-contentlist">GENERAL</span>
-              <div className="navbar-subcontect">
-                <Link to="/" style={{ textDecoration: "none" }}>
-                  <div className="navbar-icon-subcontent">
-                    <div className="navbar-icon">
-                      <GroupOutlinedIcon />
-                    </div>
-                    <span className="navbar-sublist">Contacts</span>
-                  </div>
-                </Link>
-                {addImage}
-                <Link to="/gallery" style={{ textDecoration: "none" }}>
-                  <div className="navbar-icon-subcontent">
-                    <div className="navbar-icon">
-                      <PhotoLibraryOutlinedIcon />
-                    </div>
-                    <span className="navbar-sublist">Gallery</span>
-                  </div>
-                </Link>
-                {addContac}
-              </div>
-            </div>
-            <div className="navbar-content">
-              <span className="navbar-contentlist">ACTIVITY</span>
-              <div className="navbar-subcontect">
-                <Link to="/notifications" style={{ textDecoration: "none" }}>
-                  <div className="navbar-icon-subcontent">
-                    <div className="navbar-icon">
-                      <Badge color="secondary">
-                        <NotificationsNoneOutlinedIcon />
-                      </Badge>
-                    </div>
-                    <span className="navbar-sublist">Notifications</span>
-                  </div>
-                </Link>
-                {AddEvent}
-              </div>
-            </div>
-            <div className="navbar-content">
-              <span className="navbar-contentlist">SETTINGS</span>
-              <div className="navbar-subcontect">
-                <Link to="/account" style={{ textDecoration: "none" }}>
-                  <div className="navbar-icon-subcontent">
-                    <div className="navbar-icon">
-                      <PersonOutlineOutlinedIcon />
-                    </div>
-                    <span className="navbar-sublist">Account</span>
-                  </div>
-                </Link>
-                <Link
-                  to="/privacy"
-                  style={{ textDecoration: "none" }}
-                  key={auth.uid}
-                >
-                  <div className="navbar-icon-subcontent">
-                    <div className="navbar-icon">
-                      <LockOutlinedIcon />
-                    </div>
-                    <span className="navbar-sublist">Privacy</span>
-                  </div>
-                </Link>
-
-                <div
-                  className="navbar-icon-subcontent"
-                  button
-                  onClick={props.signOut}
-                >
-                  <div className="navbar-icon">
-                    <ExitToAppOutlinedIcon />
-                  </div>
-                  <span className="navbar-sublist">Logout</span>
-                </div>
-              </div>
-            </div>
-          </Card>
-        </div>
-      </Drawer>
-      <main className={classes.content}>
-        <Toolbar />
-      </main>
+        <Toolbar className={classes.toolbar} />
+        {nav}
+      </SwipeableDrawer>
     </div>
   );
 };

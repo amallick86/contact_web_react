@@ -1,8 +1,4 @@
-.tool_bar {
-  background-color: var(--primary) !important;
-}
 .drawerContainer {
-  overflow: auto;
-  background-color: var(--horinav);
+  background-color: #0097a7;
   height: 100%;
 }

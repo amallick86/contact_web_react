@@ -5,11 +5,28 @@ import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { addalbum } from "../../../store/actions/albumAction";
 import React from "react";
-import SubNavbar from "../../Dashboard/SubNavbar";
 import "./AddPhotos.css";
+import Grid from "@material-ui/core/Grid";
+import { makeStyles } from "@material-ui/core/styles";
 import AlbumView from "./AlbumView";
 import NavBar from "../../Dashboard/NavBar";
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+  },
 
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
+  paper: {
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+  },
+}));
 function AddPhotos(props) {
   const [values, setValues] = React.useState({
     albumName: "",
@@ -24,14 +41,15 @@ function AddPhotos(props) {
     window.location.reload();
     //props.history.push("/");
   };
-
+  const classes = useStyles();
   const { auth } = props;
   if (!auth.uid) return <Redirect to="/" />;
   return (
-    <div>
+    <div className={classes.root}>
       <NavBar />
-      <div className="content">
-        <SubNavbar title={"GENERAL"} content={"ADD IMAGE"} />
+      <div className="overlay" />
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
         <div className="adphoto-main-div">
           <form autoComplete="off" onSubmit={handleSubmit}>
             <Card className="addphoto-textfield-card">
@@ -65,9 +83,16 @@ function AddPhotos(props) {
             </Card>
           </form>
         </div>
+        <div className={classes.toolbar} />
 
-        <AlbumView />
-      </div>
+        <div className={classes.root}>
+          <Grid container spacing={6}>
+            <Grid item xs={12}>
+              <AlbumView />
+            </Grid>
+          </Grid>
+        </div>
+      </main>
     </div>
   );
 }

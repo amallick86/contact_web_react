@@ -1,9 +1,9 @@
 .signup_card_div {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
-  margin-left: 125px;
+
   margin-top: 70px;
 }
 .input_single {

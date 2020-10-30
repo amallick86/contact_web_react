@@ -42,7 +42,7 @@ const UploadForm = ({ albums }) => {
           </IconButton>
         </label>
       </div>
-      <p>Upload</p>
+      <p style={{ color: "white" }}>Upload</p>
       <div className="output">
         {error && <div className="error">{error}</div>}
         {file && <div>{file.name}</div>}

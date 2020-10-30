@@ -1,50 +1,77 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { firestoreConnect } from "react-redux-firebase";
 import { compose } from "redux";
-import { CircularProgress, Divider } from "@material-ui/core";
-import SubNavbar from "../../Dashboard/SubNavbar";
+import { CircularProgress } from "@material-ui/core";
+
 import NavBar from "../../Dashboard/NavBar";
 
 import ImageView from "./ImageView";
 import UploadForm from "../UploadForm";
+import { makeStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+  },
+  paper: {
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+  },
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
+}));
 const AlbumPage = (props) => {
   const { albums, auth } = props;
-
+  const classes = useStyles();
   if (!auth.uid) return <Redirect to="/login" />;
   if (albums) {
     return (
-      <div>
+      <div className={classes.root}>
         <NavBar />
-        <div className="content">
-          <div className="sub_navbar_div">
-            <div className="sub_navbar_list">
-              <Link to="/addphoto" style={{ textDecoration: "none" }}>
-                <span className="sub_navbar_list_title ">ALBUM</span>
-              </Link>
-              <span className="sub_navbar_list_title_arrow"> {">"}</span>
-              <span className="sub_navbar_list_subtitle">
-                {albums.albumName}
-              </span>
-            </div>
-          </div>
-          <Divider className="sub_navbar_divider" />
+        <div className="overlay" />
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+
           <div className="albumpage-main-div">
             <UploadForm albums={albums} />
-            <ImageView albums={albums} />
+            <div className={classes.root}>
+              <Grid container spacing={3}>
+                <Grid item xs={6} sm={12}>
+                  <ImageView albums={albums} />
+                </Grid>
+              </Grid>
+            </div>
           </div>
-        </div>
+        </main>
       </div>
     );
   } else {
     return (
-      <div>
+      <div className={classes.root}>
+        const classes = useStyles();
         <NavBar />
-        <div className="content">
-          <SubNavbar title={"ALBUM"} content={"No Result"} />
-          <CircularProgress />
-        </div>
+        <div className="overlay" />
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+
+          <div className="albumpage-main-div">
+            <CircularProgress />
+            <div className={classes.root}>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <CircularProgress />
+                </Grid>
+              </Grid>
+            </div>
+          </div>
+        </main>
       </div>
     );
   }

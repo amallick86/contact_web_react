@@ -15,8 +15,21 @@ import { Card, CardContent, Divider } from "@material-ui/core";
 
 import EventList from "./EventList";
 import AddEvent from "./AddEvent";
-import SubNavbar from "../Dashboard/SubNavbar";
+import NavBar from "../Dashboard/NavBar";
+import { makeStyles } from "@material-ui/core/styles";
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+  },
 
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
+}));
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -62,11 +75,15 @@ function EventPage(props) {
     setValue(index);
   };
   const { auth, program } = props;
+  const classes = useStyles();
   if (!auth.uid) return <Redirect to="/" />;
   return (
-    <div className="content">
-      <SubNavbar title={"ACTIVITY"} content={"EVENTS"} />
-      <div className="page_tab_div">
+    <div className={classes.root}>
+      <NavBar />
+      <div className="overlay" />
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+
         <Tabs value={value} onChange={handleChange} className="page_tabs" left>
           <Tab label="Add An Event" {...a11yProps(0)} />
           <Tab label="Event List" {...a11yProps(1)} />
@@ -96,7 +113,7 @@ function EventPage(props) {
             </div>
           </TabPanel>
         </SwipeableViews>
-      </div>
+      </main>
     </div>
   );
 }

@@ -29,8 +29,24 @@
 }
 .mininotification-main-div {
   width: 20%;
-  margin-left: 118ex;
+  margin-left: 630px;
   position: fixed;
+}
+@media only screen and (max-width: 1200px) {
+  /*Tablets [601px -> 1200px]*/
+  .mininotification-main-div {
+    width: 20%;
+    margin-left: 450px;
+    position: fixed;
+  }
+}
+@media only screen and (max-width: 600px) {
+  /*Big smartphones [426px -> 600px]*/
+  .mininotification-main-div {
+    width: 20%;
+    margin-left: 130px;
+    position: fixed;
+  }
 }
 .userdetail-img {
   width: 230px;

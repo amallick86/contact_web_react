@@ -18,7 +18,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import CakeRoundedIcon from "@material-ui/icons/CakeRounded";
 import EventAvailableIcon from "@material-ui/icons/EventAvailable";
-import SubNavbar from "../Dashboard/SubNavbar";
+import NavBar from "../Dashboard/NavBar";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -58,6 +58,17 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     width: 500,
   },
+  rootmain: {
+    display: "flex",
+  },
+
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
 }));
 
 function Notifications(props) {
@@ -77,62 +88,66 @@ function Notifications(props) {
 
   if (!auth.uid) return <Redirect to="/login" />;
   return (
-    <div className="content">
-      <SubNavbar title={"ACTIVITY"} content={"NOTIFICATIONS"} />
-      <div className="notification-card-div">
-        <div className={classes.root}>
-          <AppBar position="static">
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              indicatorColor="primary"
-              textColor="primary"
-              variant="fullWidth"
-              aria-label="full width tabs example"
-              className="page_tabs"
+    <div className={classes.rootmain}>
+      <NavBar />
+      <div className="overlay" />
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        <div className="notification-card-div">
+          <div className={classes.root}>
+            <AppBar position="static">
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                indicatorColor="primary"
+                textColor="primary"
+                variant="fullWidth"
+                aria-label="full width tabs example"
+                className="page_tabs"
+              >
+                <Tab
+                  label="Birthday"
+                  icon={<CakeRoundedIcon />}
+                  {...a11yProps(0)}
+                />
+                <Tab
+                  label="Events"
+                  icon={<EventAvailableIcon />}
+                  {...a11yProps(1)}
+                />
+              </Tabs>
+            </AppBar>
+            <SwipeableViews
+              axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+              index={value}
+              onChangeIndex={handleChangeIndex}
             >
-              <Tab
-                label="Birthday"
-                icon={<CakeRoundedIcon />}
-                {...a11yProps(0)}
-              />
-              <Tab
-                label="Events"
-                icon={<EventAvailableIcon />}
-                {...a11yProps(1)}
-              />
-            </Tabs>
-          </AppBar>
-          <SwipeableViews
-            axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-            index={value}
-            onChangeIndex={handleChangeIndex}
-          >
-            <TabPanel
-              className="notification-card-div-birthday"
-              value={value}
-              index={0}
-              dir={theme.direction}
-            >
-              {users &&
-                users.map((user) => {
-                  return <BirthdayNotification user={user} key={user.id} />;
-                })}
-            </TabPanel>
-            <TabPanel
-              className="notification-card-div-birthday"
-              value={value}
-              index={1}
-              dir={theme.direction}
-            >
-              {program &&
-                program.map((programs) => {
-                  return <EventNotification programs={programs} />;
-                })}
-            </TabPanel>
-          </SwipeableViews>
+              <TabPanel
+                className="notification-card-div-birthday"
+                value={value}
+                index={0}
+                dir={theme.direction}
+              >
+                {users &&
+                  users.map((user) => {
+                    return <BirthdayNotification user={user} key={user.id} />;
+                  })}
+              </TabPanel>
+              <TabPanel
+                className="notification-card-div-birthday"
+                value={value}
+                index={1}
+                dir={theme.direction}
+              >
+                {program &&
+                  program.map((programs) => {
+                    return <EventNotification programs={programs} />;
+                  })}
+              </TabPanel>
+            </SwipeableViews>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

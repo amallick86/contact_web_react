@@ -20,10 +20,23 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
-import SubNavbar from "../Dashboard/SubNavbar";
 import NavBar from "../Dashboard/NavBar";
+import { makeStyles } from "@material-ui/core/styles";
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+  },
 
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
+}));
 function SignupPage(props) {
+  const classes = useStyles();
   const [values, setValues] = React.useState({
     email: "",
     password: "",
@@ -49,7 +62,7 @@ function SignupPage(props) {
     childdob: "",
     childno: "",
     photoURL:
-      "https://firebasestorage.googleapis.com/v0/b/sewadev-f27b9.appspot.com/o/profilepic%2Fsewa_logo.png?alt=media&token=fedc88be-2a7d-46e0-87b6-a09474ce27fb",
+      "https://firebasestorage.googleapis.com/v0/b/sewadev-f27b9.appspot.com/o/profilepic%2Flogo.png?alt=media&token=4f3712c5-473f-446f-9187-73923b8f79c5",
     status: "",
     accountType: "",
   });
@@ -73,11 +86,11 @@ function SignupPage(props) {
   if (!auth.uid) return <Redirect to="/" />;
 
   return (
-    <div>
+    <div className={classes.root}>
       <NavBar />
-
-      <div className="content">
-        <SubNavbar title={"GENERAL"} content={"ADD CONTACTS"} />
+      <div className="overlay" />
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
         <div className="signup_card_div">
           <Card className="card">
             <CardContent>
@@ -233,7 +246,7 @@ function SignupPage(props) {
             </CardContent>
           </Card>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

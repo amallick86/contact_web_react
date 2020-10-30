@@ -1,8 +1,10 @@
 import React from "react";
-import { Typography } from "@material-ui/core";
-import PhotoLibraryRoundedIcon from "@material-ui/icons/PhotoLibraryRounded";
+import { Card, Typography } from "@material-ui/core";
+import { connect } from "react-redux";
+import { firestoreConnect } from "react-redux-firebase";
+import { compose } from "redux";
 import { Link } from "react-router-dom";
-export default function GalleryAlbumList({ albums }) {
+function GalleryAlbumList({ albums, images }) {
   return (
     <Link
       to={"/view/" + albums.id}
@@ -10,11 +12,37 @@ export default function GalleryAlbumList({ albums }) {
       style={{ textDecoration: "none" }}
     >
       <div className="particular_album-div">
-        <div className="album-box-border">
-          <PhotoLibraryRoundedIcon className="ablumlist_icon" />
-        </div>
-        <Typography variant="h6">{albums.albumName}</Typography>
+        <Card className="album-box-border">
+          <Card elevation={10} className="title-div">
+            <Typography variant="h4" className="title-album">
+              {albums.albumName}
+            </Typography>
+          </Card>
+          {images &&
+            images.map((image) => {
+              if (image.album === albums.albumName) {
+                return <img src={image.url} alt="" className="album-img" />;
+              } else {
+                return null;
+              }
+            })}
+        </Card>
       </div>
     </Link>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    images: state.firestore.ordered.images,
+  };
+};
+
+export default compose(
+  connect(mapStateToProps),
+  firestoreConnect([
+    {
+      collection: "images",
+    },
+  ])
+)(GalleryAlbumList);

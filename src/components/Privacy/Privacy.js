@@ -11,8 +11,21 @@ import Box from "@material-ui/core/Box";
 
 import DeleteAccount from "./DeleteAccount";
 import ChangePassword from "./ChangePassword";
-import SubNavbar from "../Dashboard/SubNavbar";
+import { makeStyles } from "@material-ui/core/styles";
+import NavBar from "../Dashboard/NavBar";
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+  },
 
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
+}));
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -48,7 +61,7 @@ function a11yProps(index) {
 const Privacy = () => {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
-
+  const classes = useStyles();
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -58,9 +71,12 @@ const Privacy = () => {
   };
 
   return (
-    <div className="content">
-      <SubNavbar title={"SETTINGS"} content={"PRIVACY"} />
-      <div className="page_tab_div">
+    <div className={classes.root}>
+      <NavBar />
+      <div className="overlay" />
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+
         <Tabs value={value} onChange={handleChange} className="page_tabs" left>
           <Tab label="Change Password" {...a11yProps(0)} />
           <Tab label="Delete An Account" {...a11yProps(1)} />
@@ -77,7 +93,7 @@ const Privacy = () => {
             <DeleteAccount />
           </TabPanel>
         </SwipeableViews>
-      </div>
+      </main>
     </div>
   );
 };

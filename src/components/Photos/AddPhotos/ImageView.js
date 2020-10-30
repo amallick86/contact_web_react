@@ -1,3 +1,4 @@
+import { Grid } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
@@ -7,7 +8,11 @@ import ImageViewList from "./ImageViewList";
 function ImageView(props) {
   const { images, albums } = props;
   return (
-    <div className="imageView-mai-div">
+    <Grid
+      container
+      spacing={3}
+      style={{ display: "flex", width: "fit-content", flexWrap: "wrap" }}
+    >
       {images &&
         images.map((image) => {
           if (albums.albumName === image.album) {
@@ -16,7 +21,7 @@ function ImageView(props) {
             return null;
           }
         })}
-    </div>
+    </Grid>
   );
 }
 

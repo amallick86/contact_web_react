@@ -52,7 +52,9 @@
 .input_double {
   width: 50ch;
 }
-
+.input_double_select {
+  width: 44ch;
+}
 .button_div {
   margin-top: 20px;
   display: flex;

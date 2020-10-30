@@ -30,15 +30,13 @@
 .album-view-div {
   display: flex;
   flex-direction: row;
-  margin-left: 25ch;
-  margin-top: 10ch;
-  margin-right: 25ch;
+  margin-left: 10px;
   flex-wrap: wrap;
 }
 
 .particular_album-div {
-  margin-left: 10px;
-  margin-right: 60px;
+  margin-left: 20px;
+  margin-right: 20px;
   margin-top: 20px;
   margin-bottom: 20px;
   display: flex;
@@ -48,17 +46,40 @@
   justify-content: center;
 }
 .album-box-border {
+  background-color: rgb(168, 168, 168) !important;
   border: solid;
-  height: 180px;
-  width: 180px;
+  flex-wrap: wrap;
+  overflow: hidden;
+  z-index: -1;
+  height: 500px;
+  width: 480px;
   border-color: rgb(3, 184, 184);
+  object-fit: contain;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.ablumlist_icon {
-  width: 170px !important;
-  height: 170px !important;
+.title-div {
+  position: absolute;
+  background-color: rgb(128, 128, 128) !important;
+  opacity: 0.8;
+  border: solid;
+  border-color: aqua;
+}
+.album-img {
+  z-index: -1;
+  width: auto;
+  height: 200px;
+  filter: blur(0.8px);
+  -webkit-filter: blur(0.8px);
+}
+.title-album {
+  color: white;
+
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 .albumpage-main-div {
   display: flex;
@@ -90,16 +111,14 @@
 .imageView-mai-div {
   display: flex;
   flex-direction: row;
-  margin-left: 25ch;
-  margin-top: 10ch;
-  margin-right: 25ch;
   flex-wrap: wrap;
+  width: fit-content;
 }
 .pirticular-album-image {
-  margin-left: 10px;
-  margin-right: 60px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   display: flex;
   flex: 1 0 10%;
   flex-direction: column;
@@ -107,6 +126,9 @@
   justify-content: center;
 }
 .album-image {
-  width: 330px;
-  height: 330px;
+  width: auto;
+  height: 500px;
+  object-fit: contain;
+  background-color: white;
+  object-position: 100% 0;
 }

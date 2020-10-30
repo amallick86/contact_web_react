@@ -8,7 +8,7 @@ import SaveIcon from "@material-ui/icons/Save";
 import FileUploader from "react-firebase-file-uploader";
 
 function EditProfilePic(props) {
-  const { auth } = props;
+  const { auth, profile } = props;
   const [values, setValues] = React.useState({
     avatar: "",
     isUploading: false,
@@ -45,8 +45,8 @@ function EditProfilePic(props) {
           {values.avatarURL && (
             <img className="card_image" src={values.avatarURL} alt="" />
           )}
-          <span className="card_name">Aashish Mallick</span>
-          <span className="card_post">Software Developer</span>
+          <span className="card_name">{profile.fullName}</span>
+          <span className="card_post">{profile.Post}</span>
         </div>
         <Divider />
         <div className="pic-button-upload">
@@ -78,6 +78,7 @@ function EditProfilePic(props) {
 const mapStateToProps = (state) => {
   return {
     auth: state.firebase.auth,
+    profile: state.firebase.profile,
   };
 };
 const mapDispatchToProps = (dispatch) => {
